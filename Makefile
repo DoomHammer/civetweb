@@ -20,6 +20,8 @@ BUILD_DIR = out
 PREFIX = /usr/local
 EXEC_PREFIX = $(PREFIX)
 BINDIR = $(EXEC_PREFIX)/bin
+LIBDIR = $(PREFIX)/lib
+INCLUDEDIR = $(PREFIX)/include
 DATAROOTDIR = $(PREFIX)/share
 DOCDIR = $(DATAROOTDIR)/doc/$(CPROG)
 SYSCONFDIR = $(PREFIX)/etc
@@ -198,7 +200,19 @@ endif
 
 lib: lib$(CPROG).a
 
+install_include:
+	install -d -m 755  "$(INCLUDEDIR)"
+	install -m 644 include/*.h "$(INCLUDEDIR)"
+
+install_lib: install_include
+	install -d -m 755  "$(LIBDIR)"
+	install -m 644 lib$(CPROG).a "$(LIBDIR)"
+
 slib: lib$(CPROG).$(SHARED_LIB)
+
+install_slib: install_include
+	install -d -m 755  "$(LIBDIR)"
+	install -m 644 lib$(CPROG).$(SHARED_LIB) "$(LIBDIR)"
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -248,4 +262,4 @@ $(BUILD_DIR)/%.o : %.c
 indent:
 	astyle --suffix=none --style=linux --indent=spaces=4 --lineend=linux  include/*.h src/*.c src/*.cpp src/*.inl examples/*/*.c  examples/*/*.cpp
 
-.PHONY: all help build install clean lib so
+.PHONY: all help build install clean lib slib install_lib install_slib so

@@ -1,3 +1,7 @@
+Release Notes v1.6.1
+===
+### Objectives: Releasing through Travis CI.
+
 Release Notes v1.6
 ===
 ### Objectives: *Enhance Lua support, configuration dialog for windows, new examples, bug fixes and updates"

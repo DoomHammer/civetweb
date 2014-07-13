@@ -1,5 +1,16 @@
-language: c
+language: cpp
 compiler:
-  - gcc
-  - clang
-script: make WITH_LUA=1 WITH_DEBUG=1 WITH_IPV6=1 WITH_WEBSOCKET=1
+- gcc
+- clang
+script: RELEASE_VERSION=`head -1 RELEASE_NOTES.md|sed -ne 's/Release Notes v//p'`;
+  make WITH_CPP=1 WITH_LUA=1 WITH_DEBUG=1 WITH_IPV6=1 WITH_WEBSOCKET=1 all lib; make install
+  install_lib PREFIX=`pwd`/civetweb-$RELEASE_VERSION; tar czvf civetweb-Linux-x64.tar.gz
+  civetweb-$RELEASE_VERSION
+deploy:
+  provider: releases
+  api-key: e3eafd5c7d8915ba6d1bc08d2dd513405ab20250
+  skip_cleanup: true
+  file: civetweb-Linux-x64.tar.gz
+  on:
+    tags: true
+    all_branches: true
